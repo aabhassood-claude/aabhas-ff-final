@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FabFunnel — Pricing</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ff-paper); }
+  body { font-family: var(--font-sans); color: var(--fg-1); }
+  * { box-sizing: border-box; }
+  a { color: inherit; }
+  h1, h2, h3, h4 { margin: 0; }
+  button { font-family: inherit; }
+  /* Pricing page uses the cream surface throughout */
+  .ff-light-wrap { background: var(--ff-cream); }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--ff-cream); }
+  ::-webkit-scrollbar-thumb { background: #cfcfc7; border-radius: 999px; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#FAF9F4"/>
+  <rect x="180" y="170" width="240" height="100" rx="14" fill="#C3EB42"/>
+  <text x="300" y="232" text-anchor="middle" font-family="Geist, sans-serif" font-weight="900" font-size="56" fill="#171717" letter-spacing="-1.5">$599</text>
+  <rect x="180" y="290" width="240" height="36" rx="10" fill="#171717"/>
+  <text x="300" y="314" text-anchor="middle" font-family="Geist, sans-serif" font-weight="700" font-size="14" fill="#C3EB42" letter-spacing="2">★ MOST POPULAR</text>
+  <text x="300" y="380" text-anchor="middle" font-family="Geist, sans-serif" font-weight="900" font-size="28" fill="#171717" letter-spacing="-0.5">FabFunnel Pricing</text>
+</svg>
+</template>
+<div id="root"></div>
+
+<script type="text/babel" src="Logo.jsx"></script>
+<script type="text/babel" src="Routes.jsx"></script>
+<script type="text/babel" src="PricingData.jsx"></script>
+<script type="text/babel" src="PricingHooks.jsx"></script>
+<script type="text/babel" src="PlanCard.jsx"></script>
+<script type="text/babel" src="PlatformGlyph.jsx"></script>
+<script type="text/babel" src="MenuIcons.jsx"></script>
+<script type="text/babel" src="MegaMenus.jsx"></script>
+<script type="text/babel" src="SiteHeader.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="PricingSection.jsx"></script>
+<script type="text/babel" src="ComparisonTable.jsx"></script>
+<script type="text/babel" src="PricingFAQ.jsx"></script>
+
+<script type="text/babel">
+  function App() {
+    return (
+      <div data-screen-label="05 Pricing">
+        <SiteHeader active="pricing"/>
+        <div className="ff-light-wrap">
+          <PricingSection/>
+          <ComparisonTable/>
+          <PricingFAQ/>
+        </div>
+        <SiteFooter/>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

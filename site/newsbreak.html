@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FabFunnel — NewsBreak Ads Management</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ff-paper); }
+  body { font-family: var(--font-sans); color: var(--fg-1); }
+  * { box-sizing: border-box; }
+  a { color: inherit; }
+  h1, h2, h3, h4 { margin: 0; }
+  button { font-family: inherit; }
+  @keyframes ffFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Logo.jsx"></script>
+<script type="text/babel" src="Routes.jsx"></script>
+<script type="text/babel" src="PricingHooks.jsx"></script>
+<script type="text/babel" src="PlatformGlyph.jsx"></script>
+<script type="text/babel" src="MenuIcons.jsx"></script>
+<script type="text/babel" src="MegaMenus.jsx"></script>
+<script type="text/babel" src="SiteHeader.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="PlatformPageKit.jsx"></script>
+
+<script type="text/babel">
+  // Inline mock visuals for the NewsBreak "Why" section
+  function MockNative() {
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+          {['meta','tiktok','newsbreak'].map(g => (
+            <span key={g} style={{ width: 28, height: 28, borderRadius: 7, background: 'var(--ff-paper)', border: '1px solid var(--border-1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <PlatformGlyph name={g} size={16}/>
+            </span>
+          ))}
+          <span style={{ flex: 1 }}/>
+          <span style={{ fontFamily: "'Geist Mono'", fontSize: 8, color: 'var(--ff-rich)', fontWeight: 700, alignSelf: 'center' }}>● NATIVE</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
+          {[1,2,3].map(i => <span key={i} style={{ height: 32, borderRadius: 4, background: i === 3 ? 'rgba(254,45,45,0.18)' : 'rgba(0,0,0,0.04)', border: i === 3 ? '1px solid rgba(254,45,45,0.4)' : 'none' }}/>)}
+        </div>
+      </>
+    );
+  }
+  function MockBulkNB() {
+    return (
+      <>
+        <div style={{ fontFamily: "'Geist Mono'", fontSize: 9, color: 'var(--ff-mute)', letterSpacing: '0.1em', marginBottom: 8 }}>NEWSBREAK · BULK · 124 ADSETS</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 3 }}>
+          {Array.from({length: 32}).map((_,i) => <span key={i} style={{ height: 10, borderRadius: 2, background: i % 5 === 0 ? '#FE2D2D' : (i % 3 === 0 ? '#C3EB42' : 'rgba(0,0,0,0.08)') }}/>)}
+        </div>
+      </>
+    );
+  }
+  function MockCrossNB() {
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+          {['meta','tiktok','newsbreak'].map(g => <span key={g}><PlatformGlyph name={g} size={18}/></span>)}
+          <span style={{ marginLeft: 'auto', fontFamily: "'Geist Mono'", fontSize: 8, color: 'var(--ff-mute)', letterSpacing: '0.1em' }}>UNIFIED</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
+          {['ROAS 3.4', 'CPA $8', 'CTR 4.2'].map(t => (
+            <div key={t} style={{ padding: '5px 7px', background: 'rgba(255,255,255,0.6)', borderRadius: 4, fontFamily: "'Geist Mono'", fontSize: 9.5, fontWeight: 700, color: 'var(--ff-ink)' }}>{t}</div>
+          ))}
+        </div>
+      </>
+    );
+  }
+  function MockAutoNB() {
+    return (
+      <>
+        <div style={{ fontFamily: "'Geist Mono'", fontSize: 9, color: 'var(--ff-mute)', letterSpacing: '0.1em', marginBottom: 8 }}>AUTO-PAUSE · LOSERS</div>
+        {['NB · supplements_v3 · paused', 'NB · sleep_offer_b · paused', 'NB · vitamin_a · scaled +30%'].map((r, i) => (
+          <div key={i} style={{
+            fontFamily: "'Geist Mono'", fontSize: 9.5, color: 'var(--ff-ink)',
+            padding: '4px 6px', borderRadius: 4,
+            background: i === 2 ? 'rgba(195,235,66,0.2)' : 'rgba(255,255,255,0.6)',
+            marginBottom: 3,
+          }}>{r}</div>
+        ))}
+      </>
+    );
+  }
+
+  function App() {
+    return (
+      <div data-screen-label="04 NewsBreak Ads Management">
+        <SiteHeader active="platforms"/>
+
+        <PlatformHero
+          platform="newsbreak"
+          title="NewsBreak Ads Management."
+          body="One of the few platforms with native NewsBreak support. Launch, manage and optimize campaigns alongside Meta and TikTok — all without switching tools or learning a new dashboard."
+          primaryCTA={{ label: 'Book A Demo', href: (window.ROUTES && window.ROUTES.demo.href) || 'pricing.html' }}
+          secondaryCTA={{ label: 'See Pricing', href: (window.ROUTES && window.ROUTES.pricing.href) || 'pricing.html' }}
+          decorGlyphs={[
+            { glyph: 'newsbreak', left: '58%', top: '36%', size: 88, rotate: 6 },
+          ]}
+        />
+
+        <PlatformFeatureRow
+          heading={<>Why NewsBreak on <span style={{ color: 'var(--ff-rich)' }}>FabFunnel</span>?</>}
+          intro="Native integration. Bulk launch. Cross-platform reporting. All the things other tools bolt on as an afterthought."
+          cards={[
+            { title: 'Native Integration', body: 'FabFunnel connects directly with NewsBreak — not through a workaround or a third-party plugin. Most NewsBreak integration built into the same platform you already use for Meta and TikTok.', mock: <MockNative/>, mockBg: 'var(--ff-cream)' },
+            { title: 'Bulk Launch',        body: 'Use the same Bulk Launcher across all platforms. Launch hundreds of NewsBreak campaigns and variations in minutes using FabFunnel\'s newsbreak automation software — no separate tool, no extra steps.', mock: <MockBulkNB/>, mockBg: '#171717' },
+            { title: 'Cross-Platform View', body: 'See NewsBreak campaign data alongside Meta and TikTok in one unified reporting dashboard. Spend, CPA, ROAS — all in one place. This is what cross-platform campaign management looks like.', mock: <MockCrossNB/>, mockBg: 'var(--ff-cream)' },
+            { title: 'Automation',         body: 'Apply the same automation rules you use on Meta and TikTok to your NewsBreak campaigns. Auto-pause underperformers. Auto-scale winners. FabFunnel\'s newsbreak automation tool keeps the cycle running.', mock: <MockAutoNB/>, mockBg: 'rgba(195,235,66,0.16)' },
+          ]}
+        />
+
+        <PlatformHowItWorks
+          heading={<>How NewsBreak works on <span style={{ color: 'var(--ff-rich)' }}>FabFunnel</span>.</>}
+          accentChip={<><span style={{ display: 'inline-flex', verticalAlign: 'middle', marginRight: 6 }}><PlatformGlyph name="newsbreak" size={14}/></span>NewsBreak</>}
+          steps={[
+            { title: 'Connect Accounts',          body: 'Connect once. FabFunnel syncs everything — your campaigns, your spend data across Meta, TikTok, and NewsBreak. Instantly.' },
+            { title: 'Launch at Scale',           body: 'Pick your creatives, define your parameters, and press go. FabFunnel\'s Bulk Launcher pushes 200+ campaigns live in under 2 minutes.' },
+            { title: 'Automate, Optimize & Scale', body: 'Set your rules once. FabFunnel handles the rest — pausing what\'s bleeding money, scaling what\'s printing it, and reporting everything in real time.' },
+          ]}
+        />
+
+        <PlatformFAQ
+          heading="Frequently asked questions"
+          faqs={[
+            { q: 'Q1. Can I bulk-create NewsBreak campaigns?', a: 'Yes. The Bulk Launcher pushes hundreds of NewsBreak campaigns in a single operation. Templates, audience targeting, and creative variations are all handled.' },
+            { q: 'Q2. How often does NewsBreak data sync?',     a: 'Every 15 minutes. Your dashboards, alerts, and automation rules run on near-real-time spend and conversion data.' },
+          ]}
+        />
+
+        <PlatformFinalCTA
+          heading={<>Ready to put your NewsBreak ads on <span style={{ color: 'var(--ff-rich)' }}>autopilot?</span></>}
+          body="Thousands of media buyers, agencies, and affiliates already use FabFunnel's NewsBreak advertising automation to launch faster, spend smarter, and scale — what\u2019s bleeding budget, scaling what\u2019s printing."
+        />
+
+        <SiteFooter/>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FabFunnel — Site Preview</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { background: #0F0F0D; font-family: var(--font-sans); color: var(--ff-paper); overflow: hidden; }
+  * { box-sizing: border-box; }
+  button { font-family: inherit; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="site/Logo.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const DEVICES = {
+  desktop: { label: 'Desktop', w: null, h: null, icon: 'desktop' },
+  tablet:  { label: 'Tablet',  w: 820,  h: 1180, icon: 'tablet'  },
+  mobile:  { label: 'Mobile',  w: 390,  h: 844,  icon: 'mobile'  },
+};
+
+const PAGES = [
+  { key: 'landing',   label: 'Landing',   file: 'site/landing.html'   },
+  { key: 'meta',      label: 'Meta',      file: 'site/meta.html'      },
+  { key: 'tiktok',    label: 'TikTok',    file: 'site/tiktok.html'    },
+  { key: 'newsbreak', label: 'NewsBreak', file: 'site/newsbreak.html' },
+  { key: 'pricing',   label: 'Pricing',   file: 'site/pricing.html'   },
+  { key: 'fab-ai',    label: 'Fab AI',    file: 'site/fab-ai.html'    },
+];
+
+const DeviceIcon = ({ kind }) => {
+  const p = {
+    desktop:  <><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></>,
+    tablet:   <><rect x="5" y="2" width="14" height="20" rx="2.5"/><circle cx="12" cy="18.5" r="0.5" fill="currentColor"/></>,
+    mobile:   <><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M10 18h4"/></>,
+  }[kind];
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{p}</svg>
+  );
+};
+
+// ============================================================
+// Glass segmented control — page tabs + device toggle
+// ============================================================
+function PillSegment({ items, value, onChange, compact = false }) {
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', gap: 2,
+      padding: 3, borderRadius: 999,
+      background: 'rgba(0,0,0,0.35)',
+    }}>
+      {items.map(it => {
+        const active = value === it.value;
+        return (
+          <button key={it.value} onClick={() => onChange(it.value)} style={{
+            padding: compact ? '7px 10px' : '7px 14px',
+            border: 'none', cursor: 'pointer',
+            background: active ? 'var(--ff-lime)' : 'transparent',
+            color: active ? 'var(--ff-ink)' : 'rgba(255,255,255,0.65)',
+            fontFamily: "'Geist'", fontWeight: 600, fontSize: 12.5,
+            borderRadius: 999,
+            transition: 'background .2s var(--ease-out), color .2s var(--ease-out)',
+            display: 'inline-flex', alignItems: 'center', gap: 7,
+            letterSpacing: '-0.005em',
+            whiteSpace: 'nowrap',
+          }}>
+            {it.icon}
+            {it.label}
+            {active && it.meta && (
+              <span style={{
+                fontFamily: "'Geist Mono'", fontSize: 9.5, fontWeight: 700,
+                color: 'rgba(23,23,23,0.55)', letterSpacing: '0.06em',
+              }}>{it.meta}</span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function IconBtn({ children, title, onClick, href, rotated }) {
+  const isLink = !!href;
+  const Tag = isLink ? 'a' : 'button';
+  return (
+    <Tag
+      href={href} target={isLink ? '_blank' : undefined} rel={isLink ? 'noopener' : undefined}
+      onClick={onClick} title={title} aria-label={title}
+      style={{
+        width: 34, height: 34, borderRadius: 999,
+        background: 'transparent', border: 'none',
+        color: 'rgba(255,255,255,0.65)', cursor: 'pointer', textDecoration: 'none',
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'transform .25s var(--ease-out), color .15s ease, background .15s ease',
+        transform: rotated ? 'rotate(90deg)' : 'rotate(0)',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.color = 'var(--ff-lime)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.background = 'transparent'; }}
+    >{children}</Tag>
+  );
+}
+
+// ============================================================
+// Main preview shell
+// ============================================================
+function PreviewShell() {
+  const params = new URLSearchParams(window.location.search);
+  const initialPage = PAGES.find(p => p.key === params.get('page')) ? params.get('page') : 'landing';
+  const initialDevice = ['desktop','tablet','mobile'].includes(params.get('device')) ? params.get('device') : 'desktop';
+
+  const [page, setPage] = useState(initialPage);
+  const [device, setDevice] = useState(initialDevice);
+  const [rotated, setRotated] = useState(false);
+  const [hideControls, setHideControls] = useState(false);
+  const iframeRef = useRef(null);
+
+  const d = DEVICES[device];
+  const isFramed = d.w != null;
+  const w = isFramed ? (rotated ? d.h : d.w) : null;
+
+  const onIframeLoad = () => {
+    try {
+      const path = iframeRef.current.contentWindow.location.pathname.toLowerCase();
+      const match = PAGES.find(p => path.endsWith('/' + p.file) || path.endsWith(p.file.split('/').pop()));
+      if (match) setPage(match.key);
+    } catch (e) { /* cross-origin */ }
+  };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === '1') setDevice('desktop');
+      if (e.key === '2') setDevice('tablet');
+      if (e.key === '3') setDevice('mobile');
+      if (e.key === 'r' && isFramed) setRotated(r => !r);
+      if (e.key === 'h') setHideControls(v => !v);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isFramed]);
+
+  const currentFile = PAGES.find(p => p.key === page).file;
+  const iframeSrc = currentFile + (currentFile.includes('?') ? '&' : '?') + 'in_preview=1';
+
+  return (
+    <div style={{ position: 'fixed', inset: 0 }}>
+      {/* TOP-LEFT BRANDING */}
+      <div style={{ position: 'fixed', top: 16, left: 20, zIndex: 50, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <FFLockup height={14} fab="#FFFFFF" fun="#C3EB42" mark="full" tipInk="#1A1A1A"/>
+        <span style={{
+          padding: '3px 9px', borderRadius: 999,
+          background: 'rgba(195,235,66,0.14)', color: 'var(--ff-lime)',
+          fontFamily: "'Geist Mono'", fontSize: 9, fontWeight: 700,
+          letterSpacing: '0.18em', textTransform: 'uppercase',
+          border: '1px solid rgba(195,235,66,0.3)',
+        }}>Preview</span>
+      </div>
+
+      {/* TOP-RIGHT DIMENSIONS readout */}
+      <div style={{
+        position: 'fixed', top: 16, right: 20, zIndex: 50,
+        fontFamily: "'Geist Mono'", fontSize: 10, color: 'rgba(255,255,255,0.5)',
+        letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: 12,
+      }} className="ff-prev-readout">
+        <span>{isFramed ? `${rotated ? d.h : d.w} × ${rotated ? d.w : d.h}` : 'FLUID'}</span>
+        <span style={{ width: 1, height: 14, background: '#2a2a26' }}/>
+        <span style={{ color: 'var(--ff-lime)' }}>{currentFile.split('/').pop()}</span>
+      </div>
+
+      {/* IFRAME CANVAS */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: '#0F0F0D',
+        backgroundImage: `radial-gradient(circle at 50% 0%, rgba(195,235,66,0.04) 0%, transparent 60%),
+                          linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)`,
+        backgroundSize: 'auto, 32px 32px, 32px 32px',
+        display: 'flex', justifyContent: 'center', alignItems: 'flex-start',
+        padding: isFramed ? '56px 20px 110px' : '0',
+        overflow: 'auto',
+      }}>
+        <div style={{
+          width: isFramed ? w : '100%',
+          flexShrink: 0, flexGrow: 0, minWidth: 0, maxWidth: '100%',
+          height: isFramed ? `calc(100vh - 166px)` : '100vh',
+          minHeight: isFramed ? 'min(900px, calc(100vh - 166px))' : '100vh',
+          background: 'var(--ff-paper)',
+          borderRadius: isFramed ? 22 : 0,
+          boxShadow: isFramed
+            ? '0 0 0 1px rgba(255,255,255,0.08), 0 30px 80px -24px rgba(0,0,0,0.6)'
+            : 'none',
+          overflow: 'hidden', position: 'relative',
+          transition: 'width .35s var(--ease-out), border-radius .25s ease, height .25s ease',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {device === 'mobile' && !rotated && (
+            <div aria-hidden="true" style={{
+              position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)',
+              width: 80, height: 5, borderRadius: 999, background: 'rgba(0,0,0,0.85)', zIndex: 10,
+            }}/>
+          )}
+          <iframe
+            ref={iframeRef}
+            src={iframeSrc}
+            key={page}
+            onLoad={onIframeLoad}
+            title="FabFunnel preview"
+            style={{ width: '100%', flex: 1, border: 0, display: 'block', background: '#fff' }}
+          />
+        </div>
+      </div>
+
+      {/* FLOATING CONTROL PILL */}
+      <div className="ff-prev-controls" style={{
+        position: 'fixed', bottom: 24, left: '50%',
+        transform: hideControls ? 'translate(-50%, calc(100% + 24px))' : 'translateX(-50%)',
+        zIndex: 60,
+        display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center',
+        padding: 6,
+        maxWidth: 'calc(100vw - 32px)',
+        background: 'rgba(15,15,12,0.88)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 999,
+        backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 20px 50px -10px rgba(0,0,0,0.55), 0 0 0 1px rgba(195,235,66,0.06)',
+        transition: 'transform .35s var(--ease-out)',
+      }}>
+        <PillSegment
+          items={PAGES.map(p => ({ value: p.key, label: p.label }))}
+          value={page} onChange={setPage}
+        />
+        <span style={{ width: 1, height: 22, background: 'rgba(255,255,255,0.08)', margin: '0 2px' }}/>
+        <PillSegment
+          compact
+          items={Object.entries(DEVICES).map(([k, v]) => ({
+            value: k, label: v.label,
+            icon: <DeviceIcon kind={v.icon}/>,
+            meta: v.w ? (rotated ? `${v.h}` : `${v.w}`) : null,
+          }))}
+          value={device} onChange={setDevice}
+        />
+        <span style={{ width: 1, height: 22, background: 'rgba(255,255,255,0.08)', margin: '0 2px' }}/>
+        <IconBtn title="Rotate (R)" onClick={() => isFramed && setRotated(r => !r)} rotated={rotated}>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: isFramed ? 1 : 0.3 }}>
+            <path d="M2 6h7a4 4 0 014 4M12 13l-3-3M12 13l-3 3"/>
+          </svg>
+        </IconBtn>
+        <IconBtn title="Open in new tab" href={currentFile}>
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 2h5v5M14 2l-6 6M12 9v4a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1h4"/>
+          </svg>
+        </IconBtn>
+        <IconBtn title="Hide controls (H)" onClick={() => setHideControls(true)}>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 8l5 5 5-5"/>
+          </svg>
+        </IconBtn>
+      </div>
+
+      {/* SHOW-CONTROLS handle when hidden */}
+      {hideControls && (
+        <button
+          onClick={() => setHideControls(false)}
+          aria-label="Show controls"
+          style={{
+            position: 'fixed', bottom: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 60,
+            padding: '8px 18px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.08)',
+            background: 'rgba(15,15,12,0.88)', color: 'rgba(255,255,255,0.7)',
+            fontFamily: "'Geist Mono'", fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+            cursor: 'pointer', backdropFilter: 'blur(20px)',
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+        >
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 8l5-5 5 5"/>
+          </svg>
+          Show controls
+        </button>
+      )}
+
+      {/* Hint */}
+      {!hideControls && (
+        <div style={{
+          position: 'fixed', bottom: 8, left: '50%', transform: 'translateX(-50%)', zIndex: 50,
+          fontFamily: "'Geist Mono'", fontSize: 9, color: 'rgba(255,255,255,0.3)',
+          letterSpacing: '0.18em', textTransform: 'uppercase',
+          pointerEvents: 'none',
+        }} className="ff-prev-hint">
+          1 desktop &nbsp;·&nbsp; 2 tablet &nbsp;·&nbsp; 3 mobile &nbsp;·&nbsp; r rotate &nbsp;·&nbsp; h hide
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 720px) {
+          .ff-prev-readout { display: none !important; }
+          .ff-prev-hint { display: none !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<PreviewShell/>);
+</script>
+</body>
+</html>

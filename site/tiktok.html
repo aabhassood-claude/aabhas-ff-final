@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FabFunnel — TikTok Ads Automation</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ff-paper); }
+  body { font-family: var(--font-sans); color: var(--fg-1); }
+  * { box-sizing: border-box; }
+  a { color: inherit; }
+  h1, h2, h3, h4 { margin: 0; }
+  button { font-family: inherit; }
+  @keyframes ffFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Logo.jsx"></script>
+<script type="text/babel" src="Routes.jsx"></script>
+<script type="text/babel" src="PricingHooks.jsx"></script>
+<script type="text/babel" src="PlatformGlyph.jsx"></script>
+<script type="text/babel" src="MenuIcons.jsx"></script>
+<script type="text/babel" src="MegaMenus.jsx"></script>
+<script type="text/babel" src="SiteHeader.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="PlatformPageKit.jsx"></script>
+
+<script type="text/babel">
+  // Inline mock visuals for the TikTok features section
+  function MockBulk() {
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+          {[0,1,2,3].map(i => <span key={i} style={{ width: 18, height: 18, borderRadius: 3, background: i === 1 ? '#FE2C55' : '#1F1F1F' }}/>)}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4 }}>
+          {Array.from({length: 12}).map((_,i) => <span key={i} style={{ height: 14, borderRadius: 2, background: i % 3 === 0 ? '#C3EB42' : 'rgba(0,0,0,0.08)' }}/>)}
+        </div>
+      </>
+    );
+  }
+  function MockVideo() {
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+          {[0,1,2,3].map(i => (
+            <div key={i} style={{ flex: 1, height: 50, borderRadius: 4, background: '#171717', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', left: 0, bottom: 0, right: 0, height: i === 1 ? '70%' : `${15 + i*10}%`, background: '#C3EB42' }}/>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontFamily: "'Geist Mono'", fontSize: 9, color: 'var(--ff-mute)', letterSpacing: '0.12em' }}>HOOK · 0–3s · CTR 7.4%</div>
+      </>
+    );
+  }
+  function MockAI() {
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 8 }}>
+          <span style={{ width: 22, height: 22, borderRadius: 999, background: 'var(--ff-ink)', color: 'var(--ff-lime)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800 }}>★</span>
+          <span style={{ fontFamily: "'Geist'", fontSize: 11, fontWeight: 700, color: 'var(--ff-ink)' }}>Generate 12 variations</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4 }}>
+          {Array.from({length: 8}).map((_,i) => <span key={i} style={{ height: 26, borderRadius: 4, background: 'rgba(195,235,66,' + (0.12 + (i % 3)*0.12) + ')', border: '1px solid rgba(143,184,33,0.3)' }}/>)}
+        </div>
+      </>
+    );
+  }
+  function MockAuto() {
+    return (
+      <>
+        <div style={{ fontFamily: "'Geist Mono'", fontSize: 9, color: 'var(--ff-mute)', letterSpacing: '0.1em', marginBottom: 8 }}>RULES · 24/7</div>
+        {['IF CTR<1.2% THEN pause', 'IF ROAS>3 THEN +20%', 'IF CPA>$8 THEN -50%'].map(r => (
+          <div key={r} style={{ fontFamily: "'Geist Mono'", fontSize: 10, color: 'var(--ff-ink)', padding: '4px 6px', borderRadius: 4, background: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>{r}</div>
+        ))}
+      </>
+    );
+  }
+  function MockCross() {
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 5, marginBottom: 8 }}>
+          {['#1877F2', '#000', '#FE2D2D'].map((c,i) => <span key={i} style={{ width: 14, height: 14, borderRadius: 3, background: c }}/>)}
+          <span style={{ flex: 1 }}/>
+          <span style={{ fontFamily: "'Geist Mono'", fontSize: 8, color: 'var(--ff-rich)', fontWeight: 700 }}>● ALL SYNCED</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
+          {['ROAS 4.2', 'CPA $12', 'CTR 3.1'].map(t => (
+            <div key={t} style={{ padding: '6px 8px', background: 'rgba(255,255,255,0.6)', borderRadius: 4, fontFamily: "'Geist Mono'", fontSize: 10, fontWeight: 700, color: 'var(--ff-ink)' }}>{t}</div>
+          ))}
+        </div>
+      </>
+    );
+  }
+  function MockInsights() {
+    return (
+      <>
+        <svg viewBox="0 0 200 60" preserveAspectRatio="none" style={{ width: '100%', height: 50 }}>
+          <path d="M0,50 L25,40 L50,42 L75,30 L100,32 L125,18 L150,22 L175,10 L200,4" fill="none" stroke="#C3EB42" strokeWidth="2"/>
+        </svg>
+        <div style={{ fontFamily: "'Geist Mono'", fontSize: 9, color: 'var(--ff-mute)', letterSpacing: '0.1em', marginTop: 4 }}>VERTICAL: SUPPLEMENTS · +24% TREND</div>
+      </>
+    );
+  }
+
+  function App() {
+    return (
+      <div data-screen-label="03 TikTok Ads Automation">
+        <SiteHeader active="platforms"/>
+
+        <PlatformHero
+          platform="tiktok"
+          title="TikTok Ads Automation."
+          body="Scale TikTok campaigns with bulk creation, AI video analysis, creative testing, and performance-based automation — all without leaving FabFunnel's dashboard."
+          primaryCTA={{ label: 'Book A Demo', href: (window.ROUTES && window.ROUTES.demo.href) || 'pricing.html' }}
+          secondaryCTA={{ label: 'See Pricing', href: (window.ROUTES && window.ROUTES.pricing.href) || 'pricing.html' }}
+          decorGlyphs={[
+            { glyph: 'tiktok', left: '58%', top: '36%', size: 88, rotate: -8 },
+          ]}
+        />
+
+        <PlatformFeatureRow
+          heading={<>TikTok <span style={{ color: 'var(--ff-rich)' }}>features</span>.</>}
+          intro="The full TikTok toolbelt — bulk creation, video analysis, and AI variants from one place."
+          cards={[
+            { title: 'Bulk Launch',        body: "Launch hundreds of TikTok ad variations in minutes. FabFunnel's bulk automation software handles campaign creation at scale so your team keeps shipping, not clicking.", mock: <MockBulk/>, mockBg: '#171717' },
+            { title: 'AI Video Analysis',  body: "Find out which hooks and CTAs actually drive engagement. Our AI Video Analysis breaks content down scene-by-scene so you know exactly what to put in front of TikTok's algorithm.", mock: <MockVideo/>, mockBg: 'var(--ff-cream)' },
+            { title: 'AI Creatives',       body: 'Generate TikTok-native creatives at warehouse scale. Just drop your brief — FabFunnel produces dozens of variants directly inside the Bulk Launcher. Built for the platform\'s pace.', mock: <MockAI/>, mockBg: 'rgba(195,235,66,0.18)' },
+            { title: 'Automation',         body: 'Set auto-rules for TikTok campaigns and let FabFunnel run them. Auto-pause underperformers. Auto-scale winners. FabFunnel\'s TikTok ad automation software is patient when you can\'t be.', mock: <MockAuto/>, mockBg: 'var(--ff-cream)' },
+            { title: 'Cross-Platform',     body: 'Manage TikTok alongside Meta and NewsBreak from one unified dashboard. No tab-switching between tools to understand what your full ad spend is doing.', mock: <MockCross/>, mockBg: 'var(--ff-cream)' },
+            { title: 'Industry Insights',  body: "Get unique insight from FabFunnel's TikTok automated creative optimization, informed by the industry as a whole — not just your last month's data.", mock: <MockInsights/>, mockBg: 'var(--ff-cream)' },
+          ]}
+        />
+
+        <PlatformHowItWorks
+          heading={<>How TikTok works on <span style={{ color: 'var(--ff-rich)' }}>FabFunnel</span>.</>}
+          accentChip={<><span style={{ display: 'inline-flex', verticalAlign: 'middle', marginRight: 6 }}><PlatformGlyph name="tiktok" size={14}/></span>TikTok</>}
+          steps={[
+            { title: 'Connect Accounts',  body: 'Connect your TikTok ads accounts. Everything syncs automatically — audiences, creatives, and reporting feeds. No missing data.' },
+            { title: 'Launch at Scale',   body: 'Use the Bulk Launcher to push hundreds of TikTok ad variations into market in minutes. AI-generated creative variants set up the heavy lifting in seconds.' },
+            { title: 'Scale Body',        body: "See which TikTok ad sets and creative angles are firing. FabFunnel's TikTok automated creative optimization adjusts in flight to give you insights you need to move fast and pivot harder." },
+          ]}
+        />
+
+        <PlatformAudience
+          heading="Who uses FabFunnel for TikTok?"
+          accentChip="Built for"
+          personas={[
+            { name: 'Affiliate Marketers', glyph: '↗', body: "Test TikTok hook variations across multiple offers. Launch, kill, relaunch. Find winners. FabFunnel's bulk TikTok ad automation software is built for this pace." },
+            { name: 'Media Buyers',        glyph: '✦', body: "Centralized TikTok management with AI-assisted optimization. Real-time analytics, automated rules, and AI-driven creative optimization — so every decision is based on data, not gut feel." },
+            { name: 'Agencies',            glyph: '◧', body: 'Manage multiple client TikTok accounts from one workspace. No more logging in and out between accounts. One dashboard. Every client. Full visibility across all campaigns at all times.' },
+          ]}
+        />
+
+        <PlatformFAQ
+          heading="Frequently asked questions"
+          faqs={[
+            { q: 'Q1. Can I bulk-create TikTok campaigns?',         a: 'Yes. The Bulk Launcher creates up to 200+ TikTok campaigns in a single operation, with audience targeting and creative variations handled in templates.' },
+            { q: 'Q2. Does FabFunnel support TikTok Shops?',        a: 'Yes — TikTok Shops campaigns are supported alongside standard reach, traffic, and conversion objectives. Catalog feeds sync in real time.' },
+            { q: 'Q3. How often does TikTok data sync?',            a: 'Every 15 minutes. Your dashboards, alerts, and automation rules run on near-real-time spend, impression, and conversion data.' },
+          ]}
+        />
+
+        <PlatformFinalCTA
+          heading={<>Ready to put your TikTok ads on <span style={{ color: 'var(--ff-rich)' }}>autopilot?</span></>}
+          body="Thousands of media buyers, agencies, and affiliates already use FabFunnel's TikTok advertising automation to launch faster, spend smarter, and scale without the manual grind."
+        />
+
+        <SiteFooter/>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

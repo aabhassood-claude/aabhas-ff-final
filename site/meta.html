@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FabFunnel — Meta Ads Automation</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: var(--ff-paper); }
+  body { font-family: var(--font-sans); color: var(--fg-1); }
+  * { box-sizing: border-box; }
+  a { color: inherit; }
+  h1, h2, h3, h4 { margin: 0; }
+  button { font-family: inherit; }
+  @keyframes ffFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Logo.jsx"></script>
+<script type="text/babel" src="Routes.jsx"></script>
+<script type="text/babel" src="PricingHooks.jsx"></script>
+<script type="text/babel" src="PlatformGlyph.jsx"></script>
+<script type="text/babel" src="MenuIcons.jsx"></script>
+<script type="text/babel" src="MegaMenus.jsx"></script>
+<script type="text/babel" src="SiteHeader.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="PlatformPageKit.jsx"></script>
+
+<script type="text/babel">
+  function App() {
+    return (
+      <div data-screen-label="02 Meta Ads Automation">
+        <SiteHeader active="platforms"/>
+
+        <PlatformHero
+          platform="meta"
+          title="Meta Ads Automation."
+          body="Stop managing Facebook and Instagram campaigns one at a time. FabFunnel's Meta Ads Automation bulk launches campaigns, generates AI creatives, and automates optimization — all from one unified dashboard."
+          primaryCTA={{ label: 'Book A Demo', href: (window.ROUTES && window.ROUTES.demo.href) || 'pricing.html' }}
+          secondaryCTA={{ label: 'See Pricing', href: (window.ROUTES && window.ROUTES.pricing.href) || 'pricing.html' }}
+          decorGlyphs={[
+            { glyph: 'meta', left: '58%', top: '40%', size: 88, rotate: 6 },
+          ]}
+        />
+
+        <PlatformStats stats={[
+          { v: 100, suffix: 'k', label: 'Meta campaigns launched' },
+          { v: 5,   suffix: '×', label: 'Faster than manual' },
+          { v: 5,   suffix: '+', label: 'Ad platforms supported' },
+          { v: 15,  suffix: ' min', label: 'Ad spend sync' },
+        ]}/>
+
+        <PlatformHowItWorks
+          heading={<>How Meta works on <span style={{ color: 'var(--ff-rich)' }}>FabFunnel</span>.</>}
+          accentChip={<><span style={{ display: 'inline-flex', verticalAlign: 'middle', marginRight: 6 }}><PlatformGlyph name="meta" size={14}/></span>Meta</>}
+          steps={[
+            { title: 'Connect Accounts',         body: 'Link your Meta ad accounts and FabFunnel syncs everything — campaigns, audiences, creatives. Nothing gets left behind.' },
+            { title: 'Launch at Scale',          body: 'Use the Bulk Launcher with AI creatives to push 200+ Facebook and Instagram campaigns live at once. Templates with dynamic variables mean every variation is set up in seconds, not hours.' },
+            { title: 'Automate, Optimize & Scale', body: 'Automation optimizes your campaigns 24/7 — pausing what drains budget, scaling what hits ROAS targets, surfacing insights you need to make your next move with confidence.' },
+          ]}
+        />
+
+        <PlatformAudience
+          heading="Who uses FabFunnel for Meta?"
+          accentChip="Built for"
+          personas={[
+            { name: 'Agencies',     glyph: '◧', body: "Manage dozens of client Meta accounts from one white-label workspace. Automated reporting, team permissions, and SLA-grade automation built for client scale." },
+            { name: 'Affiliates',   glyph: '↗', body: "Bulk-launch hundreds of offers on Facebook with AI-tested creatives. Scale winners before the window closes. FabFunnel's Meta automation gives affiliates the speed edge." },
+            { name: 'Media Buyers', glyph: '✦', body: 'Automate Meta optimization so you can focus on strategy. Real-time analytics, automated rules, and AI-assisted decisions — this is what the Meta advertising automation future looks like today.' },
+          ]}
+        />
+
+        <PlatformFAQ
+          heading="Frequently asked questions"
+          faqs={[
+            { q: 'Q1. Can I bulk-launch Facebook campaigns at the same time?',           a: 'Yes. The Bulk Launcher pushes up to 200+ campaigns across multiple Facebook ad accounts in a single operation, with naming, budget pacing, and creative variations handled automatically.' },
+            { q: 'Q2. How does FabFunnel\'s Facebook ad automation tool handle creative rotation?', a: 'Co-Pilot watches CTR and CPM per ad. When fatigue is detected, it auto-pauses spent creatives and uploads fresh AI-generated variants from your top hook — all without lifting a finger.' },
+            { q: 'Q3. How often does Meta ad spend data sync?',                          a: 'Every 15 minutes. Your dashboards, alerts, and automation rules all run on near-real-time numbers — not yesterday\'s.' },
+          ]}
+        />
+
+        <PlatformFinalCTA
+          heading={<>Ready to put your Facebook ads on <span style={{ color: 'var(--ff-rich)' }}>autopilot?</span></>}
+          body="Thousands of media buyers, agencies, and affiliates already use FabFunnel's Facebook advertising automation to launch faster, spend smarter, and scale without the manual grind."
+        />
+
+        <SiteFooter/>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
