@@ -118,7 +118,7 @@ function SiteHeader({ active }) {
   const OpenMenu = openItem && openItem.Menu ? MenuMap[openItem.Menu] : null;
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 90 }}>
+    <header style={{ position: 'sticky', top: 'var(--mac-banner-h, 0px)', zIndex: 90 }}>
       <nav style={{
         background: scrolled ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.7)',
         backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',

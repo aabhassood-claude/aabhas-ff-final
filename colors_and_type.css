@@ -63,6 +63,15 @@
   --ff-lime:      #C3EB42;  /* accent · click states on dark · mark accent */
   --ff-soft:      #A8D632;  /* mark-only flow · NEVER use in UI/type */
   --ff-ink:       #171717;  /* primary type, mark banner */
+
+  /* ---------- MAC2026 event accent (banner + date pill + session stripe only) ---------- */
+  --accent-mac-purple:      #5B2DCC;
+  --accent-mac-purple-deep: #3A1A8C;
+  --accent-mac-purple-soft: rgba(91, 45, 204, 0.15);
+  --accent-mac-purple-fg:   #FFFFFF;
+
+  /* ---------- Sticky offset honored by SiteHeader when MAC banner is mounted ---------- */
+  --mac-banner-h: 0px;
   --ff-graphite:  #1A1A1A;  /* dark surfaces / dashboards */
   --ff-paper:     #FFFFFF;  /* pure surface */
   --ff-warm:      #F7F7F4;
